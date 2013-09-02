@@ -4,4 +4,7 @@ game="RussianRoulette"
 seats="6"
 lang="en"
 waittime="10"
+
+host="localhost"
+port="9999"
 />
