@@ -1,5 +1,6 @@
 package com.kato.games.russianroulette.classic.service
 {
+	import com.kato.game.commlibs.core.FlashVars;
 	import com.kato.game.commlibs.core.SignalBus;
 	import com.kato.game.commlibs.core.XMLService;
 	import com.kato.games.russianroulette.classic.controller.signals.ApplicationEvent;
@@ -23,6 +24,9 @@ package com.kato.games.russianroulette.classic.service
 		[Inject]
 		public var game:Game;
 		[Inject]
+		
+		[Inject]
+		public var flashVars:FlashVars;
 		public var signalBus:SignalBus;
 		private var _onComplete:Function;
 		public function FlashVarsService()
@@ -38,9 +42,18 @@ package com.kato.games.russianroulette.classic.service
 		}
 		public function setConfig(signal:LoaderSignal, xml:XML):void{
 			logger.debug(xml.toXMLString());
-			game.facebookAPIKey=xml.facebook.@apikey;
-			game.facebookSecret=xml.facebook.@secret;
+			flashVars.lang=xml.@lang;
+			flashVars.seats=int(xml.@seats);
+			flashVars.waittime=int(xml.@waittime);
+			flashVars.game==xml.@game;
+			flashVars.host==xml.@host;
+			flashVars.port=int(xml.@port);
 			
+			
+			game.seatCount=int(xml.@seats);
+			game.waitTime=int(xml.@waittime);
+			game.host=xml.@host;
+			game.port=int(xml.@port);
 			if (_onComplete!=null)
 				_onComplete();
 		}

@@ -43,8 +43,8 @@ package com.kato.games.russianroulette.classic.service
 		}
 		public function setConfig(signal:LoaderSignal, xml:XML):void{
 			debug(xml.toXMLString());
-			game.facebookAPIKey=xml.facebook.@apikey;
-			game.facebookSecret=xml.facebook.@secret;
+			game.facebookAPIKey=xml.@apikey;
+			game.facebookSecret=xml.@secret;
 			
 			facebookService.api_key=game.facebookAPIKey;
 			if (_onComplete!=null)

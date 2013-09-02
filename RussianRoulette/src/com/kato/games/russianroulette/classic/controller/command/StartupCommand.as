@@ -3,6 +3,7 @@ package com.kato.games.russianroulette.classic.controller.command
 	import com.kato.game.commlibs.core.FlashVars;
 	import com.kato.game.commlibs.core.SignalBus;
 	import com.kato.games.russianroulette.classic.controller.signals.ApplicationEvent;
+	import com.kato.games.russianroulette.classic.controller.signals.SocketEvent;
 	import com.kato.games.russianroulette.classic.model.URLSModel;
 	import com.kato.games.russianroulette.classic.service.ConfigService;
 	import com.kato.games.russianroulette.classic.service.FlashVarsService;
@@ -12,7 +13,6 @@ package com.kato.games.russianroulette.classic.controller.command
 	
 	import robotlegs.bender.bundles.mvcs.Command;
 	import robotlegs.bender.framework.api.ILogger;
-	import robotlegs.extensions.facebook.impl.events.FacebookEvent;
 	
 	public class StartupCommand extends Command
 	{
@@ -39,7 +39,10 @@ package com.kato.games.russianroulette.classic.controller.command
 			if(flashVars.localhost) {
 				flashVarsService.load(function ():void{
 					configService.load(function ():void{
-						eventDispatcher.dispatchEvent(new FacebookEvent(FacebookEvent.API_INIT_REQUEST));
+						//eventDispatcher.dispatchEvent(new FacebookEvent(FacebookEvent.API_INIT_REQUEST));
+						signalBus.dispatch(SocketEvent.CONNECT);
+						
+						signalBus.dispatch(ApplicationEvent.STARTUP_COMPLETE);
 					});
 				});
 			}
