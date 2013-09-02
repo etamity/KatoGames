@@ -16,7 +16,7 @@ package com.kato.games.russianroulette.classic.service
 		public var logger:ILogger;
 		public function GameSocketService()
 		{
-			SmartSocketClient.addDataListener("RussianRoulette",this);
+			SmartSocketClient.addDataListener("GameSocketService",this);
 			
 			socket.addEventListener(Event.CONNECT,doConnectEvent);
 			socket.addEventListener(Event.CLOSE,doCloseEvent);
@@ -33,7 +33,7 @@ package com.kato.games.russianroulette.classic.service
 			logger.debug(call.serverResponse);
 		}
 		private function doConnectEvent(evt:Event):void{
-			var call:RemoteCall=new RemoteCall("greeting","RussianRoulette");
+			var call:RemoteCall=new RemoteCall("greeting","GameSocketService");
 			call.message="Client Greeting";
 			SmartSocketClient.send(call);
 		}
