@@ -3,6 +3,7 @@ package com.kato.games.russianroulette.configs
 	import com.kato.game.commlibs.core.FlashVars;
 	import com.kato.game.commlibs.core.SignalBus;
 	import com.kato.game.commlibs.core.XMLService;
+	import com.kato.games.russianroulette.classic.controller.command.LoginCommand;
 	import com.kato.games.russianroulette.classic.controller.command.SetupViewsCommand;
 	import com.kato.games.russianroulette.classic.controller.command.SocketConnetCommand;
 	import com.kato.games.russianroulette.classic.controller.command.StartupCommand;
@@ -13,6 +14,7 @@ package com.kato.games.russianroulette.configs
 	import com.kato.games.russianroulette.classic.service.ConfigService;
 	import com.kato.games.russianroulette.classic.service.FlashVarsService;
 	import com.kato.games.russianroulette.classic.service.GameSocketService;
+	import com.kato.games.russianroulette.classic.service.socket.LoginService;
 	import com.kato.games.russianroulette.classic.view.LoginView;
 	import com.kato.games.russianroulette.classic.view.mediator.LoginViewMediator;
 	
@@ -69,6 +71,8 @@ package com.kato.games.russianroulette.configs
 			injector.map(URLSModel).asSingleton();
 			injector.map(SignalBus).toValue(signalBus);
 			injector.map(GameSocketService).asSingleton();
+			injector.map(LoginService).asSingleton();
+			
 		}
 		public function mapMediators():void{
 			mediatorMap.map(LoginView).toMediator(LoginViewMediator);
@@ -79,6 +83,9 @@ package com.kato.games.russianroulette.configs
 			commandMap.mapSignal(signalBus.signal(ApplicationEvent.STARTUP), StartupCommand, true);
 			commandMap.mapSignal(signalBus.signal(ApplicationEvent.STARTUP_COMPLETE), SetupViewsCommand, true);
 			commandMap.mapSignal(signalBus.signal(SocketEvent.CONNECT), SocketConnetCommand);
+			commandMap.mapSignal(signalBus.signal(SocketEvent.LOGIN), LoginCommand);
+			
+	
 		}
 		public function init():void
 		{

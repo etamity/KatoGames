@@ -41,8 +41,6 @@ package com.kato.games.russianroulette.classic.controller.command
 					configService.load(function ():void{
 						//eventDispatcher.dispatchEvent(new FacebookEvent(FacebookEvent.API_INIT_REQUEST));
 						signalBus.dispatch(SocketEvent.CONNECT);
-						
-						signalBus.dispatch(ApplicationEvent.STARTUP_COMPLETE);
 					});
 				});
 			}

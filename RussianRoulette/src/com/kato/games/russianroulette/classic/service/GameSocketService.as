@@ -1,5 +1,8 @@
 package com.kato.games.russianroulette.classic.service
 {
+	import com.kato.game.commlibs.core.SignalBus;
+	import com.kato.games.russianroulette.classic.controller.signals.ApplicationEvent;
+	
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	
@@ -14,9 +17,11 @@ package com.kato.games.russianroulette.classic.service
 		
 		[Inject]
 		public var logger:ILogger;
+		[Inject]
+		public var signalBus:SignalBus;
 		public function GameSocketService()
 		{
-			SmartSocketClient.addDataListener("GameSocketService",this);
+			SmartSocketClient.addDataListener("RussianRoulette",this);
 			
 			socket.addEventListener(Event.CONNECT,doConnectEvent);
 			socket.addEventListener(Event.CLOSE,doCloseEvent);
@@ -29,12 +34,15 @@ package com.kato.games.russianroulette.classic.service
 			logger.error(evt);
 			socket.close();
 		}
-		public function onGreeting(call:RemoteCall):void{
-			logger.debug(call.serverResponse);
+		public function onSocketConnected(call:RemoteCall):void{
+			logger.debug(call);
+			if (call.status=="connected")
+			signalBus.dispatch(ApplicationEvent.STARTUP_COMPLETE);
+			
 		}
 		private function doConnectEvent(evt:Event):void{
-			var call:RemoteCall=new RemoteCall("greeting","GameSocketService");
-			call.message="Client Greeting";
+			var call:RemoteCall=new RemoteCall("socketConnected","RussianRoulette");
+			call.message="Client Connected!";
 			SmartSocketClient.send(call);
 		}
 		
