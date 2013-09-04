@@ -31,8 +31,9 @@ package com.kato.games.russianroulette.classic.service
 			logger.error(evt);
 		}
 		private function doCloseEvent(evt:Event):void{
-			logger.error(evt);
 			socket.close();
+			//logger.error(evt);
+			
 		}
 		public function onSocketConnected(call:RemoteCall):void{
 			logger.debug(call);
