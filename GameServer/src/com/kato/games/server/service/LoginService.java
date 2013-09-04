@@ -1,19 +1,19 @@
 package com.kato.games.server.service;
 
-import net.smartsocket.Logger;
+import com.google.inject.Inject;
+import com.kato.games.server.common.IGameServer;
 
-import com.google.inject.Singleton;
-
-@Singleton
 public class LoginService implements ILoginService {
 
+	@Inject
+	private IGameServer gameSever;
 	public LoginService() {
 		// TODO Auto-generated constructor stub
-		Logger.log("LoginService");
+		//gameSever.log("LoginService");
 		System.out.println("LoginService");
 	}
 	public void login(String username,String password){
-		Logger.log("login: "+username+" , "+password);
+		gameSever.log(this.getClass().getSimpleName()+": "+username+" , "+password);
 		System.out.println("login: "+username+" , "+password);
 	}
 

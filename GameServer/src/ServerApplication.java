@@ -16,10 +16,10 @@ public class ServerApplication {
 		//ChatServer.main(args);
 		//GameServer.main(args);
 		Injector injector = Guice.createInjector(new GameServerModule());
-		
 		//ILoginService loginService=injector.getInstance(LoginService.class);
-		//GameServer gameServer= injector.getInstance(GameServer.class);
-		//gameServer.start();
-		GameServer.main(args);
+		//ILoginService loginService=injector.getInstance(LoginService.class);
+		GameServer gameServer= injector.getInstance(GameServer.class);
+		gameServer.start();
+		//GameServer.main(args);
 	}
 }

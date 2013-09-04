@@ -7,15 +7,17 @@ import net.smartsocket.serverextensions.TCPExtension;
 
 import com.google.gson.JsonObject;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.kato.games.server.model.ActionsConstant;
 import com.kato.games.server.service.ILoginService;
 
 
-public class GameServer extends TCPExtension {
+public class GameServer extends TCPExtension implements IGameServer {
 	@Inject
-	public ILoginService loginService;
+	private ILoginService loginService;
 	
-	public GameServer(int port) {
+	@Inject
+	public GameServer(@Named("GameServer.port") int port) {
 		super(port);
 		// TODO Auto-generated constructor stub
 	}
@@ -45,7 +47,7 @@ public class GameServer extends TCPExtension {
 		// TODO Auto-generated method stub
 		Logger.setLogLevel(Logger.DEBUG);
 		Logger.log("Game Sever Started.");
-		Logger.log("Listening Port...");
+		Logger.log("Listening Port...["+ this.getPort()+"]");
 	}
 	
 	public void processAction(TCPClient client,JsonObject json){
@@ -72,8 +74,12 @@ public class GameServer extends TCPExtension {
 		client.send(call);
 	}
 	
+	public void log(Object obj){
+		Logger.log(obj);
+	}
+	
 	public static void main(String[] args) {
-		new GameServer(9999).start();
+		//new GameServer(9999).start();
 	}
 
 
