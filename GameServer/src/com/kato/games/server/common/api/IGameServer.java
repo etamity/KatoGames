@@ -1,4 +1,4 @@
-package com.kato.games.server.common;
+package com.kato.games.server.common.api;
 
 public interface IGameServer {	
 	void start(); 

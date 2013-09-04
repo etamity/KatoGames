@@ -15,6 +15,10 @@ public class Player {
 	public String fb_id = null;
 
 	public TCPClient client;
+	
+	public boolean dead= false;
+	
+	public boolean played=false;
 	public Player(JsonObject userInfo,TCPClient client) {
 		// TODO Auto-generated constructor stub
 		username=userInfo.get("username").getAsString();

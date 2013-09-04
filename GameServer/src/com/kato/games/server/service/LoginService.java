@@ -1,7 +1,8 @@
 package com.kato.games.server.service;
 
 import com.google.inject.Inject;
-import com.kato.games.server.common.IGameServer;
+import com.kato.games.server.common.api.IGameServer;
+import com.kato.games.server.service.api.ILoginService;
 
 public class LoginService implements ILoginService {
 

@@ -8,13 +8,13 @@ import net.smartsocket.serverextensions.TCPExtension;
 import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.kato.games.server.model.ActionsConstant;
-import com.kato.games.server.service.ILoginService;
+import com.kato.games.server.common.api.IActionProcess;
+import com.kato.games.server.common.api.IGameServer;
 
 
 public class GameServer extends TCPExtension implements IGameServer {
 	@Inject
-	private ILoginService loginService;
+	private IActionProcess actionProcess;
 	
 	@Inject
 	public GameServer(@Named("GameServer.port") int port) {
@@ -50,19 +50,10 @@ public class GameServer extends TCPExtension implements IGameServer {
 		Logger.log("Listening Port...["+ this.getPort()+"]");
 	}
 	
-	public void processAction(TCPClient client,JsonObject json){
+	public void processMessage(TCPClient client,JsonObject json){
 		Logger.log("ACTION: " + json.get("action").getAsString());
-		String action=json.get("action").getAsString();
-		
-		switch (action)
-		{
-			case ActionsConstant.Login:
-				String username =json.get("username").getAsString();
-				String password =json.get("password").getAsString();
-				//loginService=new LoginService();
-				loginService.login(username, password);
-				break;
-		}
+		actionProcess.processAction(client, json);
+
 	}
 	
 	public void socketConnected(TCPClient client,JsonObject json){
@@ -77,10 +68,5 @@ public class GameServer extends TCPExtension implements IGameServer {
 	public void log(Object obj){
 		Logger.log(obj);
 	}
-	
-	public static void main(String[] args) {
-		//new GameServer(9999).start();
-	}
-
 
 }

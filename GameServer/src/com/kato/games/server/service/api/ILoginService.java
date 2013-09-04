@@ -1,4 +1,4 @@
-package com.kato.games.server.service;
+package com.kato.games.server.service.api;
 
 public interface ILoginService {
 
