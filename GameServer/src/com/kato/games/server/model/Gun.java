@@ -38,6 +38,13 @@ public class Gun {
 		bulletSlots.addAll(tempSlot);
 	}
 
+	
+	public void reload(int slotID){
+		if (slotID<MAX_SLOTS){
+			bulletSlots.set(slotID, new Slot());
+		}
+	}
+	
 	public void shoot(Player player){
 		boolean result=bulletSlots.getFirst().isFilled();
 		if (result == true)

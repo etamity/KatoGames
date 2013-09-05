@@ -5,6 +5,11 @@ import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import net.smartsocket.Logger;
+
+import com.google.inject.Inject;
+import com.kato.games.server.service.GameService;
+
 public class Room {
 	public LinkedList<Player> playerList = new LinkedList<Player>();
 	public Queue<Player> queue =  new LinkedList<Player>();
@@ -22,26 +27,23 @@ public class Room {
     
     public Timer gameTimer;
     
-    public int roundTime=10;  // seconds
+    public int roundTime=3;  // seconds
     
     
     private TimerTask gameTimeTask;
     
+    @Inject
+    private GameService gameService;
     
 	public Room(Player player) {
 		// TODO Auto-generated constructor stub
+		System.out.println(this.getClass().getSimpleName()+"  Room");
 		hostPlayer=player;
 		currentPlayer=player;
 		playerList.add(player);
 		gun=new Gun();
 		gameTimer=new Timer();
 		
-		gameTimeTask=new TimerTask(){
-			  @Override
-			  public void run() {
-				  gameLoop();
-			  }
-		};
 		
 
 	}
@@ -55,6 +57,8 @@ public class Room {
 		
 		
 		currentPlayer=nextPlayer();
+		gameService.nextPlayer(currentPlayer);
+		System.out.println(this.getClass().getSimpleName()+"  nextPlayer");
 	}
 	
 	public void join(Player player){
@@ -86,7 +90,10 @@ public class Room {
 	
 	public void startGame(Player player) {
 		// TODO Auto-generated method stub
+		
+		System.out.println(this.getClass().getSimpleName()+"  startGame");
 		playGun(currentPlayer);
+		gameService.startGame(player);
 	}
 
 	public void endGame(){
@@ -100,24 +107,35 @@ public class Room {
 	}
 	
 	public void playGun(Player player){
-		gameTimer.cancel();
-		gameTimer.schedule(gameTimeTask, roundTime*1000);
-		
+		//gameTimer.cancel();
+		gameTimer.schedule(new TimerTask(){
+			  @Override
+			  public void run() {
+				  gameLoop();
+			  }
+		}, roundTime*1000);
+
 		// SOCKET: PLAYGUN
 	}
 	
 	public void spin(Player player) {
 		// TODO Auto-generated method stub
-		
+		gun.spin();
+		gun.shoot(player);
+		gameService.spin(player);
+		System.out.println(this.getClass().getSimpleName()+"  spin");
 	}
 
 	public void shoot(Player player) {
 		// TODO Auto-generated method stub
-		
+		gun.shoot(player);
+		gameService.shoot(player);
+		System.out.println(this.getClass().getSimpleName()+"  shoot");
 	}
 
-	public boolean reload(int slotID) {
+	public void reload(int slotID) {
 		// TODO Auto-generated method stub
-		return false;
+		
+		gun.reload(slotID);
 	}
 }

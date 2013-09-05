@@ -1,5 +1,7 @@
 package com.kato.games.server.common;
 
+import java.util.LinkedList;
+
 import net.smartsocket.Logger;
 import net.smartsocket.protocols.json.RemoteCall;
 import net.smartsocket.serverclients.TCPClient;
@@ -10,11 +12,15 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.kato.games.server.common.api.IActionProcess;
 import com.kato.games.server.common.api.IGameServer;
+import com.kato.games.server.model.Player;
+import com.kato.games.server.model.Room;
 
 
 public class GameServer extends TCPExtension implements IGameServer {
 	@Inject
 	private IActionProcess actionProcess;
+	
+	public LinkedList<Room> roomList = new LinkedList<Room>();
 	
 	@Inject
 	public GameServer(@Named("GameServer.port") int port) {
@@ -22,6 +28,15 @@ public class GameServer extends TCPExtension implements IGameServer {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	public void testing(Player player){
+		System.out.println(this.getClass().getSimpleName()+"  testing");
+		Room testRoom=new Room(player);
+		testRoom.startGame(player);
+		
+
+	}
+	
 	@Override
 	public void onConnect(TCPClient client) {
 		// TODO Auto-generated method stub
@@ -53,6 +68,9 @@ public class GameServer extends TCPExtension implements IGameServer {
 	public void processMessage(TCPClient client,JsonObject json){
 		Logger.log("ACTION: " + json.get("action").getAsString());
 		actionProcess.processAction(client, json);
+		Player player=new Player(json,client);
+		System.out.println(this.getClass().getSimpleName()+"  Player");
+		testing(player);
 
 	}
 	
