@@ -36,7 +36,7 @@ package com.kato.games.russianroulette.classic.service
 			
 		}
 		public function onSocketConnected(call:RemoteCall):void{
-			logger.debug(call);
+			logger.debug(call.message);
 			if (call.status=="connected")
 			signalBus.dispatch(ApplicationEvent.STARTUP_COMPLETE);
 			

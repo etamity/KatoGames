@@ -12,7 +12,7 @@ package com.kato.games.russianroulette.classic.service.socket
 		}
 		
 		public function login(username:String,password:String):void{
-			var call:RemoteCall=new RemoteCall("processAction","RussianRoulette");
+			var call:RemoteCall=new RemoteCall("processMessage","RussianRoulette");
 			call.action=ActionsConstant.Login;
 			call.username=username;
 			call.password=password;
