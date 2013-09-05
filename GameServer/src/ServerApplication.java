@@ -2,8 +2,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.kato.games.server.common.GameServer;
 import com.kato.games.server.module.GameServerModule;
-import com.kato.games.server.service.ILoginService;
-import com.kato.games.server.service.LoginService;
 
 
 public class ServerApplication {

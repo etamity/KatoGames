@@ -9,13 +9,8 @@ public class GameService implements IGameService {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void startGame(Player player) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
-	public void startGame() {
+	public void startGame(Player player) {
 		// TODO Auto-generated method stub
 		
 	}
