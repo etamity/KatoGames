@@ -5,12 +5,11 @@ import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import net.smartsocket.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import com.google.inject.Inject;
-import com.kato.games.server.service.GameService;
-
-public class Room {
+public class Room{
 	public LinkedList<Player> playerList = new LinkedList<Player>();
 	public Queue<Player> queue =  new LinkedList<Player>();
 	
@@ -23,47 +22,65 @@ public class Room {
     
     public Player currentPlayer;
     
-    public Gun gun;
+    public IGun gun;
     
     public Timer gameTimer;
     
     public int roundTime=3;  // seconds
     
     
+    public boolean started=false;
+    
     private TimerTask gameTimeTask;
     
-    @Inject
-    private GameService gameService;
+    private Logger logger;
     
-	public Room(Player player) {
+    //@Inject
+    //private GameService gameService;
+    
+	public Room() {
 		// TODO Auto-generated constructor stub
-		System.out.println(this.getClass().getSimpleName()+"  Room");
-		hostPlayer=player;
-		currentPlayer=player;
-		playerList.add(player);
-		gun=new Gun();
+		
+		logger=LogManager.getLogger("["+Room.class.getSimpleName()+"]");
+		
+		logger.trace("Create Room") ;
 		gameTimer=new Timer();
-		
-		
+		gun=new Gun();
+		gameTimeTask=new TimerTask(){
+			  @Override
+			  public void run() {
+				  gameLoop();
+			  }
+		};
 
 	}
-
+	public void join(Player player){
+		logger.trace(player.username+" Joined Room") ;
+		playerList.add(player);
+		queue.offer(player);
+		if (hostPlayer==null)
+		{
+			hostPlayer=player;
+		}
+		if (currentPlayer==null){
+			currentPlayer=nextPlayer();
+		}
 	
+	}
+
+
 	public void gameLoop(){
 		//  SOCKET: NEXT PLAYER	
-		
+		logger.trace("Next Player:" + currentPlayer.username) ;
 		if (currentPlayer.played==false)
 			shoot(currentPlayer);
 		
 		
 		currentPlayer=nextPlayer();
-		gameService.nextPlayer(currentPlayer);
-		System.out.println(this.getClass().getSimpleName()+"  nextPlayer");
+
 	}
-	
-	public void join(Player player){
-		playerList.add(player);
-	}
+
+
 	public int getPlayerNum(){
 		return playerList.size();
 	}
@@ -77,24 +94,29 @@ public class Room {
 			queue.offer(player);
 		}
 	}
-	
+
 	public Player nextPlayer(){
-		Player player =queue.peek();
+		Player player =queue.poll();
 		if (player==null){
 			createQueue();
-			player=queue.peek();
+			player=queue.poll();
 		}
 			
 		return player; 
 	}
 	
-	public void startGame(Player player) {
+
+	public void startGame() {
 		// TODO Auto-generated method stub
-		
-		System.out.println(this.getClass().getSimpleName()+"  startGame");
+		logger.trace( "startGame") ;
+		if (started!=true)
+		{
 		playGun(currentPlayer);
-		gameService.startGame(player);
+		started=true;
+		}
+		//gameService.startGame(player);
 	}
+
 
 	public void endGame(){
 		queue.clear();
@@ -104,33 +126,31 @@ public class Room {
 			player.dead=false;
 			queue.offer(player);
 		}
+		started=false;
 	}
-	
-	public void playGun(Player player){
-		//gameTimer.cancel();
-		gameTimer.schedule(new TimerTask(){
-			  @Override
-			  public void run() {
-				  gameLoop();
-			  }
-		}, roundTime*1000);
 
+	public void playGun(Player player){
+		
+		gameTimer.schedule(gameTimeTask, 0,roundTime*1000);
 		// SOCKET: PLAYGUN
 	}
 	
+
 	public void spin(Player player) {
 		// TODO Auto-generated method stub
+		logger.trace("spin") ;
 		gun.spin();
 		gun.shoot(player);
-		gameService.spin(player);
-		System.out.println(this.getClass().getSimpleName()+"  spin");
+		//gameService.spin(player);
+
 	}
 
 	public void shoot(Player player) {
 		// TODO Auto-generated method stub
 		gun.shoot(player);
-		gameService.shoot(player);
-		System.out.println(this.getClass().getSimpleName()+"  shoot");
+		//gameService.shoot(player);
+
+		logger.trace("shoot") ;
 	}
 
 	public void reload(int slotID) {

@@ -20,13 +20,7 @@ public class Player {
 	
 	public boolean played=false;
 	
-	public JsonObject json;
-	public Player(JsonObject userInfo,TCPClient client) {
-		// TODO Auto-generated constructor stub
-		username=userInfo.get("username").getAsString();
-		//fb_id=userInfo.get("fb_id").getAsString();
-		this.client=client;
-		json=userInfo;
+	public Player() {
 		
 	}
 

@@ -22,6 +22,7 @@ public class GameServer extends TCPExtension implements IGameServer {
 	
 	public LinkedList<Room> roomList = new LinkedList<Room>();
 	
+	
 	@Inject
 	public GameServer(@Named("GameServer.port") int port) {
 		super(port);
@@ -31,8 +32,6 @@ public class GameServer extends TCPExtension implements IGameServer {
 	
 	public void testing(Player player){
 		System.out.println(this.getClass().getSimpleName()+"  testing");
-		Room testRoom=new Room(player);
-		testRoom.startGame(player);
 		
 
 	}
@@ -68,9 +67,9 @@ public class GameServer extends TCPExtension implements IGameServer {
 	public void processMessage(TCPClient client,JsonObject json){
 		Logger.log("ACTION: " + json.get("action").getAsString());
 		actionProcess.processAction(client, json);
-		Player player=new Player(json,client);
+		//Player player=new Player(json,client);
 		System.out.println(this.getClass().getSimpleName()+"  Player");
-		testing(player);
+		//testing(player);
 
 	}
 	

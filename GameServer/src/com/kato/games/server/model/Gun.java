@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import com.google.inject.Inject;
 import com.kato.games.server.service.api.IGameService;
 
-public class Gun {
+public class Gun implements IGun {
 
 	private LinkedList<Slot> bulletSlots;
 	
@@ -13,8 +13,8 @@ public class Gun {
 	
 	public final int DEFAULT_BULLETNUM=2;
 	
-	@Inject
-	private IGameService gameService;
+	//@Inject
+	//private IGameService gameService;
 	public Gun() {
 		// TODO Auto-generated constructor stub
 		bulletSlots=new LinkedList<Slot>();
@@ -27,6 +27,10 @@ public class Gun {
 		bulletSlots.get(1).reload();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.kato.games.server.model.IGun#spin()
+	 */
+	@Override
 	public void spin(){
 		int spin= (int)Math.random()*MAX_SLOTS;
 		LinkedList<Slot> tempSlot =new LinkedList<Slot>() ;
@@ -39,18 +43,26 @@ public class Gun {
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see com.kato.games.server.model.IGun#reload(int)
+	 */
+	@Override
 	public void reload(int slotID){
 		if (slotID<MAX_SLOTS){
 			bulletSlots.set(slotID, new Slot());
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.kato.games.server.model.IGun#shoot(com.kato.games.server.model.Player)
+	 */
+	@Override
 	public void shoot(Player player){
 		boolean result=bulletSlots.getFirst().isFilled();
 		if (result == true)
 			player.dead=true;
 		
-		gameService.shoot(player);
+		//gameService.shoot(player);
 	
 
 	}
